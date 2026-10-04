@@ -1,0 +1,212 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct
+{
+	int  Book_ID;
+	char Title[100];
+	char Author[100];
+  float Price;
+	char Status[10];
+} Book;
+	Book *library;
+
+	int N;
+	
+void create()
+{
+ int i;
+ printf("\nEnter number of books to add: ");
+ scanf("%d", &N);
+ free(library);
+ library = (Book *) malloc( sizeof(Book)*N);
+	
+for (i = 0; i < N; i++)
+{
+  printf("Book ID: ");
+  scanf("%d", &library[i].Book_ID);
+	
+	printf("Title: ");
+	scanf(" %99[^\n]", library[i].Title);
+	
+	printf("Author: ");
+	scanf(" %99[^\n]", library[i].Author);
+	
+  printf("Price: ");
+	scanf("%f", &library[i].Price);
+
+	printf("Availability Status (Available/Issued): ");
+  scanf(" %9[^\n]", library[i].Status);
+}	
+	    printf("\n%d Book record(s) added successfully!\n", N);
+}
+	
+	void display()
+	{
+    int i;
+
+	    for (i = 0; i < N; i++)
+    {
+     printf("%-10d %-25s %-20s %-10.2f %-12s\n"
+     library[i].Book_ID, library[i].Title, library[i].Author, library[i].Price, library[i].Status);
+	  }
+	}
+	
+	void search()
+	{
+	  int id, i, found = 0;
+    printf("\nEnter Book ID to search: ");
+	  scanf("%d", &id);
+
+	  for (i = 0; i < N; i++)
+	  {
+	    if (library[i].Book_ID == id)
+	    {
+	      found = 1;
+	      printf("\nBook Found!\n");
+	      printf("Book ID : %d\n", library[i].Book_ID);
+	      printf("Title   : %s\n", library[i].Title);
+        printf("Author  : %s\n", library[i].Author);
+	      printf("Price   : %.2f\n", library[i].Price);
+	      printf("Status  : %s\n", library[i].Status);
+	      break;
+      }
+	  }
+	    if (!found)
+	       printf("\nBook with ID %d not found.\n", id);
+	}	
+	void issueBook()
+	{
+    int id, i, found = 0;
+	  printf("\nEnter Book ID to issue: ");
+	  scanf("%d", &id);
+    for (i = 0; i < N; i++)
+    {
+      if (library[i].Book_ID == id)
+       {
+            found = 1;
+            if (strcmp(library[i].Status, "Issued") == 0)
+               printf("\nBook with ID %d was already issued.\n", id);
+
+            else
+	             {
+	                strcpy(library[i].Status, "Issued");
+                   printf("\nBook with ID %d was issued and its status was updated.\n", id);
+	             }
+	             break;
+	     }
+	   }
+	    if (!found)
+	        printf("\nBook with ID %d not found.\n", id);
+	 }
+
+	void returnBook()
+	{
+	    int id, i, found = 0;
+	    printf("\nEnter Book ID to return: ");
+	    scanf("%d", &id);
+	
+      for (i = 0; i < N; i++)
+	      {
+	        if (library[i].Book_ID == id)
+	          {
+	            found = 1;
+	            if (strcmp(library[i].Status, "Available") == 0)
+	                printf("\nBook with ID %d was returned.\n", id);
+	            else
+            {
+                strcpy(library[i].Status, "Available");
+                printf("\nBook with ID %d was returned and status was updated.\n", id);
+	          }
+	            break;
+            }
+	     }
+	    if (!found)
+	        printf("\nBook with ID %d not found.\n", id);
+	 }
+	
+	int main()
+	{
+	    int choice;
+	
+	    do
+     {
+	     printf("1. Add Book Records\n");
+	     printf("2. Display all Book Records\n");
+	     printf("3. Search Book by Book ID\n");
+	     printf("4. Issue a Book\n");
+       printf("5. Return a Book\n");
+       printf("6. Exit\n");
+	     printf("=======================================================\n");
+	     printf("Enter your choice: ");
+	     scanf("%d", &choice);
+	
+       switch (choice)
+      {
+        case 1: create(); break;
+        case 2: display(); break;
+        case 3: search(); break;
+        case 4: issueBook(); break;
+        case 5: returnBook(); break;
+        case 6: printf("\nExiting program... Freeing allocated memory.\n");
+        free(library);
+        break;
+      }
+    } while (choice != 6);
+  return 0;
+}
+
+
+Expected output
+1. Add Book Records
+2. Display all Book Records
+3. Search Book by Book ID
+4. Issue a Book
+5. Return a Book
+6. Exit
+
+Enter your choice:
+1 3 
+10001 
+
+Data Structures Horowitz 
+550
+
+Available 
+10002
+
+C Programming Ritchie
+450 
+
+Available 
+10003
+
+Let Us C Kanetkar
+350
+Issued
+2 
+
+10001               Data Structures Horowitz             550                          Available 
+10002               C Programming Ritchie            450                          Available 
+10003               Let Us C Kanetkar                   350                           Issued
+
+3
+10001 Book Found! with all details
+
+3
+999 Book with ID 999 not found
+
+4
+10001 Book with ID 10001 was issued successfully
+
+4 
+10001Book with ID 10001 is already issued
+
+4
+999   Book with ID 999 not found
+
+5
+999   Book with ID 999 not found
+
+6
+Exiting program... Freeing allocated memory
